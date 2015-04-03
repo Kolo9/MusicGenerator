@@ -15,6 +15,7 @@ public enum NoteEnum {
 	Ab(207.65);
 	
 	private static int[] minorSteps = new int[]{2, 1, 2, 2, 1, 2};
+	private static int[] majorSteps = new int[]{2, 2, 1, 2, 2, 2, 1};
 	
 	private double freq;
 	
@@ -53,10 +54,42 @@ public enum NoteEnum {
 		return noteEnum.f(octave);
 	}
 	
+	public double addMajor(NoteEnum key, int num, int octave) {
+		int position = positionInMajorKey(key);
+		if (position == -1) return f(octave); //Not in key
+		while (num >= 7) {
+			octave++;
+			num -= 7;
+		}
+		while (num <= -7) {
+			octave--;
+			num += 7;
+		}
+		position += 7; //To fix mod negative values
+		NoteEnum noteEnum = getSpecifiedPositionInMajorKey(key, (position + num) % 7);		
+		if (num < 0 && noteEnum.ordinal() > ordinal()) {
+			octave--;
+		} else if (num > 0 && noteEnum.ordinal() < ordinal()) {
+			octave++;
+		}
+		
+		return noteEnum.f(octave);
+	}
+	
 	private NoteEnum getSpecifiedPositionInMinorKey(NoteEnum key, int position) {
 		int stepsFromBase = 0;
 		for (int i = 0; i < position; i++) {
 			stepsFromBase += minorSteps[i];
+		}
+		int reqOrdinal = key.ordinal() + stepsFromBase;
+		reqOrdinal %= NoteEnum.values().length;
+		return NoteEnum.values()[reqOrdinal];
+	}
+	
+	private NoteEnum getSpecifiedPositionInMajorKey(NoteEnum key, int position) {
+		int stepsFromBase = 0;
+		for (int i = 0; i < position; i++) {
+			stepsFromBase += majorSteps[i];
 		}
 		int reqOrdinal = key.ordinal() + stepsFromBase;
 		reqOrdinal %= NoteEnum.values().length;
@@ -74,28 +107,15 @@ public enum NoteEnum {
 		return -1;
 	}
 	
-	private boolean isInMinorKey(NoteEnum key) {
+	private int positionInMajorKey(NoteEnum key) {
+		int position = 0;
 		int i = key.ordinal();
-		if (i == ordinal()) return true;
-		i += 2;
-		i %= NoteEnum.values().length;
-		if (i == ordinal()) return true;
-		i += 1;
-		i %= NoteEnum.values().length;
-		if (i == ordinal()) return true;
-		i += 2;
-		i %= NoteEnum.values().length;
-		if (i == ordinal()) return true;
-		i += 2;
-		i %= NoteEnum.values().length;
-		if (i == ordinal()) return true;
-		i += 1;
-		i %= NoteEnum.values().length;
-		if (i == ordinal()) return true;
-		i += 2;
-		i %= NoteEnum.values().length;
-		if (i == ordinal()) return true;
-		return false;
+		if (i == ordinal()) return position;
+		for (; i != key.ordinal() - majorSteps[majorSteps.length-1]; i += majorSteps[position]) {
+			if (i == ordinal()) return position;
+			position++;
+		}
+		return -1;
 	}
 }
 

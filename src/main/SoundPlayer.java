@@ -18,6 +18,7 @@ public class SoundPlayer {
 	   {
 	      final int SAMPLING_RATE = 44100;            // Audio sampling rate
 	      final int SAMPLE_SIZE = 2;                  // Audio sample size in bytes
+	      final float VOLUME = .6f;
 	      
 	      int timeCalc = 0;
 	      for (Note n: notes) {
@@ -78,7 +79,7 @@ public class SoundPlayer {
 	         
 	         for (int i=0; i < ctSamplesThisPass; i++) {
 	        	 
-	        	cBuf.putShort((short)(Short.MAX_VALUE * Math.sin(2*Math.PI * fCyclePosition)));
+	        	cBuf.putShort((short)(Short.MAX_VALUE * VOLUME * Math.sin(2*Math.PI * fCyclePosition)));
 	        	
 	            totalValuesWritten++;
 	            if (totalValuesWritten >= noteSampleLength) {

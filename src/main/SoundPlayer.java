@@ -18,7 +18,7 @@ public class SoundPlayer {
 	   {
 	      final int SAMPLING_RATE = 44100;            // Audio sampling rate
 	      final int SAMPLE_SIZE = 2;                  // Audio sample size in bytes
-	      final float VOLUME = .6f;
+	      final float VOLUME = .3f;
 	      
 	      int timeCalc = 0;
 	      for (Note n: notes) {

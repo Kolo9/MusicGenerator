@@ -11,7 +11,16 @@ public class Main {
 	private static NoteEnum base = NoteEnum.Eb;
 	private static KeyEnum key = KeyEnum.MAJOR;
 	private static Random RNG = new Random(System.currentTimeMillis());
-	private static int[] positionProbabilityGrid = new int[]{0, 2, 4, 6, 7};
+	private static int[][] positionProbabilityGrid = new int[][]{
+								{2, 4, 6, 7, 0, 2, 4, 6, 7},
+								{},
+								{0, 4, 6, 7, 0, 2, 4, 6, 7},
+								{},
+								{0, 2, 6, 7, 0, 2, 4, 6, 7},
+								{},
+								{0, 2, 4, 7, 0, 2, 4, 6, 7},
+								{0, 2, 4, 6, 0, 2, 4, 6, 7},
+	};
 	private static int[] lengthProbabilityGrid = new int[]{0, 1, 2, 0, 1, 0, 1, 0, 1};
 
 	public static void main(String[] args) {
@@ -41,22 +50,23 @@ public class Main {
 		*/
 		
 		double beatsElapsed = 2.0;
+		int lastRandom = 0;
 		while (beatsElapsed < 7) {
 			NoteLengthEnum length = NoteLengthEnum.values()[lengthProbabilityGrid[RNG.nextInt(lengthProbabilityGrid.length)]];
-			notes.add(new Note(base.add(key, base, positionProbabilityGrid[RNG.nextInt(positionProbabilityGrid.length)], 1), length));
+			notes.add(new Note(base.add(key, base, lastRandom = positionProbabilityGrid[lastRandom][RNG.nextInt(positionProbabilityGrid[lastRandom].length)], 1), length));
 			beatsElapsed += length.frac; 
 		}
 		while (beatsElapsed < 8) {
-			notes.add(new Note(base.add(key, base, positionProbabilityGrid[RNG.nextInt(positionProbabilityGrid.length)], 1), NoteLengthEnum.EIGTH));
+			notes.add(new Note(base.add(key, base, lastRandom = positionProbabilityGrid[lastRandom][RNG.nextInt(positionProbabilityGrid[lastRandom].length)], 1), NoteLengthEnum.EIGTH));
 			beatsElapsed += NoteLengthEnum.EIGTH.frac;
 		}
 		while (beatsElapsed < 11) {
 			NoteLengthEnum length = NoteLengthEnum.values()[lengthProbabilityGrid[RNG.nextInt(lengthProbabilityGrid.length)]];
-			notes.add(new Note(base.add(key, base, positionProbabilityGrid[RNG.nextInt(positionProbabilityGrid.length)], 1), length));
+			notes.add(new Note(base.add(key, base, lastRandom = positionProbabilityGrid[lastRandom][RNG.nextInt(positionProbabilityGrid[lastRandom].length)], 1), length));
 			beatsElapsed += length.frac; 
 		}
 		while (beatsElapsed < 12) {
-			notes.add(new Note(base.add(key, base, positionProbabilityGrid[RNG.nextInt(positionProbabilityGrid.length)], 1), NoteLengthEnum.EIGTH));
+			notes.add(new Note(base.add(key, base, lastRandom = positionProbabilityGrid[lastRandom][RNG.nextInt(positionProbabilityGrid[lastRandom].length)], 1), NoteLengthEnum.EIGTH));
 			beatsElapsed += NoteLengthEnum.EIGTH.frac;
 		}
 		notes.add(new Note(base.f(1), NoteLengthEnum.WHOLE));

@@ -19,6 +19,11 @@ public class Note {
 		double bps = bpm / 60; //This many quarter notes per second in x/4 time sig
 		return (int)(sampleRate / bps * (1.0/128));
 	}
+	
+	@Override
+	public String toString() {
+		return length.toString();
+	}
 }
 
 
